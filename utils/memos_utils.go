@@ -45,7 +45,6 @@ func SendMemos(memos *Memos) {
 // GetMemosList 获取Memos列表
 func GetMemosList(status enums.RowStatus, limit int) []MemosBody {
 	var apiUrl = fmt.Sprintf("%s/api/v1/memo?openId=%s&rowStatus=%s&limit=%d", config.Get("baseurl"), config.GetOpenId(), status.String(), limit)
-	fmt.Println(apiUrl)
 	body, _ := Get(apiUrl)
 	var memosList []MemosBody
 	err := json.Unmarshal(body, &memosList)
