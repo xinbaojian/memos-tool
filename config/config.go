@@ -2,6 +2,8 @@ package config
 
 import (
 	"fmt"
+	"github.com/fsnotify/fsnotify"
+	"github.com/hokaccha/go-prettyjson"
 	"github.com/spf13/viper"
 	"os"
 )
@@ -21,6 +23,10 @@ func init() {
 	viper.SetConfigType("json")
 	// 读取配置文件
 	_ = viper.ReadInConfig()
+	viper.OnConfigChange(func(e fsnotify.Event) {
+		fmt.Println("Config file changed:", e.Name)
+	})
+	viper.WatchConfig()
 }
 
 // Set 设置 openId
@@ -68,4 +74,13 @@ func Reset() (string, error) {
 		return "reset openId failed", fmt.Errorf("Reset config error config file: %s \n", err)
 	}
 	return "reset openId success", nil
+}
+
+func Show() ([]byte, error) {
+	var config Config
+	err := viper.Unmarshal(&config)
+	if err != nil {
+		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+	}
+	return prettyjson.Marshal(config)
 }
