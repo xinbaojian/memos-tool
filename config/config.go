@@ -84,3 +84,7 @@ func Show() ([]byte, error) {
 	}
 	return prettyjson.Marshal(config)
 }
+
+func Remove() error {
+	return os.Remove(baseConfigFile)
+}

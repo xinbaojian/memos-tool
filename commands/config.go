@@ -44,6 +44,14 @@ func GetConfig() *cli.Command {
 					return ShowCommand(c)
 				},
 			},
+			{
+				Name:    "remove",
+				Aliases: []string{"rm"},
+				Usage:   "remove memos config file",
+				Action: func(c *cli.Context) error {
+					return config.Remove()
+				},
+			},
 		},
 		Action: func(c *cli.Context) error {
 			return fmt.Errorf("please use subcommand")
