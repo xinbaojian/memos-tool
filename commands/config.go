@@ -17,15 +17,23 @@ func GetConfig() *cli.Command {
 				Name:    "add",
 				Aliases: []string{"a"},
 				Usage:   "add a memos openId",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:    "key",
+						Aliases: []string{"k"},
+						Value:   "openid",
+					},
+				},
 				Action: func(c *cli.Context) error {
 					// 配置 memos openId
-					openId := c.Args().First()
-					if openId == "" {
+					value := c.Args().First()
+					if value == "" {
 						return fmt.Errorf("memos openId can not empty")
 					}
-					openId, err := config.SetOpenId(openId)
+					key := c.String("key")
+					value, err := config.Set(key, value)
 					if err == nil {
-						fmt.Println("set openId success:", openId)
+						fmt.Println(fmt.Sprintf("set %s success: %s", key, value))
 					}
 					return err
 				},

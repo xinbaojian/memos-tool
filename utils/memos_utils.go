@@ -30,10 +30,9 @@ type MemosBody struct {
 	RelationList []any  `json:"relationList"`
 }
 
-var baseUrl = "https://memos.xiuyuan.xin/api/v1/memo"
-
 // SendMemos 发送Memos消息
 func SendMemos(memos *Memos) {
+	var baseUrl = fmt.Sprintf("%s/api/v1/memo", config.Get("baseurl"))
 	jsonStr, _ := json.Marshal(memos)
 	openId := config.GetOpenId()
 	url := fmt.Sprintf("%s?openId=%s", baseUrl, openId)
