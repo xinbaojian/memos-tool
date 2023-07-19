@@ -36,3 +36,18 @@ func Get(url string) ([]byte, error) {
 	}(resp.Body)
 	return io.ReadAll(resp.Body)
 }
+
+// Delete 发送Delete请求
+func Delete(url string) ([]byte, error) {
+	req, _ := http.NewRequest("DELETE", url, nil)
+	req.Header.Set("Content-Type", "application/json")
+	client := &http.Client{}
+	resp, _ := client.Do(req)
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(resp.Body)
+	return io.ReadAll(resp.Body)
+}

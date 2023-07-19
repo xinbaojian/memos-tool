@@ -53,3 +53,14 @@ func GetMemosList(status enums.RowStatus, limit int) []MemosBody {
 	}
 	return memosList
 }
+
+// DelById 根据ID删除Memos
+func DelById(id string) error {
+	var apiUrl = fmt.Sprintf("%s/api/v1/memo/%s?openId=%s", config.Get("baseurl"), id, config.GetOpenId())
+	_, err := Delete(apiUrl)
+	if err != nil {
+		fmt.Println("delete memos fail:", err)
+	}
+	fmt.Println("delete memos success, ID: ", id)
+	return err
+}

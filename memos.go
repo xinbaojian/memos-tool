@@ -17,6 +17,7 @@ func main() {
 		Commands: []*cli.Command{
 			commands.GetList(),
 			commands.GetConfig(),
+			commands.DeleteCommand(),
 		},
 		Flags: []cli.Flag{
 			&cli.StringFlag{
