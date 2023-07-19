@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/urfave/cli/v2"
 	"memos-tool/enums"
+	"memos-tool/utils"
 )
 
 // GetList 获取添加命令
@@ -30,10 +31,14 @@ func GetList() *cli.Command {
 			},
 		},
 		Action: func(c *cli.Context) error {
-			// TODO 查询Memos列表
+			// 查询Memos列表
 			limit := c.Int("limit")
-			rowStatus := enums.RowStatus(c.Int("status")).String()
-			fmt.Println(limit, rowStatus)
+			rowStatus := enums.RowStatus(c.Int("status"))
+			list := utils.GetMemosList(rowStatus, limit)
+			for _, memos := range list {
+				fmt.Println(memos.ID, memos.Content, memos.Visibility)
+				fmt.Println("--------------------------------------------------")
+			}
 			return nil
 		},
 	}

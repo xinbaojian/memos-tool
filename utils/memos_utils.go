@@ -1,13 +1,10 @@
 package utils
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
-	"log"
 	"memos-tool/config"
-	"net/http"
+	"memos-tool/enums"
 )
 
 type Memos struct {
@@ -36,23 +33,24 @@ func SendMemos(memos *Memos) {
 	jsonStr, _ := json.Marshal(memos)
 	openId := config.GetOpenId()
 	url := fmt.Sprintf("%s?openId=%s", baseUrl, openId)
-	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
-	req.Header.Set("Content-Type", "application/json")
-
-	client := &http.Client{}
-	resp, _ := client.Do(req)
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			log.Fatal(err)
-		}
-	}(resp.Body)
-
-	body, _ := io.ReadAll(resp.Body)
+	body, _ := Post(url, jsonStr)
 	var memosBody MemosBody
 	err := json.Unmarshal(body, &memosBody)
 	if err != nil {
 		fmt.Println("add fail:", err)
 	}
 	fmt.Println("add success, ID: ", memosBody.ID)
+}
+
+// GetMemosList 获取Memos列表
+func GetMemosList(status enums.RowStatus, limit int) []MemosBody {
+	var apiUrl = fmt.Sprintf("%s/api/v1/memo?openId=%s&rowStatus=%s&limit=%d", config.Get("baseurl"), config.GetOpenId(), status.String(), limit)
+	fmt.Println(apiUrl)
+	body, _ := Get(apiUrl)
+	var memosList []MemosBody
+	err := json.Unmarshal(body, &memosList)
+	if err != nil {
+		panic(fmt.Errorf("json.Unmarshal failed: %v", err))
+	}
+	return memosList
 }
