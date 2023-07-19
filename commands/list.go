@@ -11,7 +11,7 @@ import (
 func GetList() *cli.Command {
 	return &cli.Command{
 		Name:                   "list",
-		Aliases:                []string{"a"},
+		Aliases:                []string{"ls"},
 		Usage:                  "拉取Memos列表",
 		UseShortOptionHandling: true,
 		Flags: []cli.Flag{
